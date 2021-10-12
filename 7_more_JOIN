@@ -1,0 +1,66 @@
+SELECT id, title FROM movie
+WHERE yr = 1962;
+
+SELECT yr FROM movie
+WHERE title = 'Citizen Kane';
+
+SELECT id, title, yr FROM movie
+WHERE title LIKE '%Star%Trek%'
+ORDER BY yr;
+
+SELECT id FROM actor
+WHERE name = 'Glenn Close';
+
+SELECT id FROM movie
+WHERE title = 'Casablanca';
+
+SELECT name FROM actor
+INNER JOIN casting ON actor.id = casting.actorid
+INNER JOIN movie ON movie.id = casting.movieid
+WHERE movieid = 11768;
+
+SELECT name FROM actor
+INNER JOIN casting ON actor.id = casting.actorid
+INNER JOIN movie ON movie.id = casting.movieid
+WHERE title = 'Alien';
+
+SELECT title FROM movie
+INNER JOIN casting ON movie.id = casting.movieid
+INNER JOIN actor ON actor.id = casting.actorid
+WHERE actor.name = 'Harrison Ford';
+
+SELECT title FROM movie
+INNER JOIN casting ON movie.id = casting.movieid
+INNER JOIN actor ON actor.id = casting.actorid
+WHERE actor.name = 'Harrison Ford'
+AND casting.ord != 1;
+
+SELECT title, name FROM movie
+INNER JOIN casting ON movie.id = casting.movieid
+INNER JOIN actor ON actor.id = casting.actorid
+WHERE yr = 1962
+AND casting.ord = 1;
+
+SELECT yr, COUNT(title) FROM movie 
+INNER JOIN casting ON movie.id = casting.movieid
+INNER JOIN actor ON actor.id = casting.actorid
+WHERE name='Rock Hudson'
+GROUP BY yr
+HAVING COUNT(title) > 2;
+
+SELECT title, name FROM movie 
+INNER JOIN casting ON (movie.id = casting.movieid AND casting.ord = 1)
+INNER JOIN actor ON actor.id = casting.actorid
+WHERE movie.id IN 
+(SELECT casting.movieid FROM casting 
+WHERE actorid IN
+(SELECT id FROM actor
+WHERE name='Julie Andrews'));
+
+SELECT name FROM actor
+INNER JOIN casting
+ON actor.id = casting.actorid
+WHERE ord = 1
+GROUP BY name
+HAVING COUNT(movieid) >= 15
+ORDER BY name;
